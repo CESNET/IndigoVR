@@ -4,7 +4,7 @@ The INDIGO Virtual Router Appliance facilitates creation of overlay networks acr
 * Inter-site point to point VPN
 * Redundant topologies
 * Set up in userspace
-* Configured on contextualization to enable network topology control by Platform as a service orchestrators
+* Configured on contextualization to enable network topology control by Platform as a Service (PaaS) orchestrators
 
 This repository contains contextualization scripts to install and configure the INDIGO Virtual Router appliance in a plain Linux image.
 
