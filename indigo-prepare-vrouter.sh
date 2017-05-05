@@ -101,7 +101,6 @@ Script will install and configure these packages from official sources:
 
 EOF
 
-exit
 apt-get update && apt-get install ${PACKAGES}
 
 # Enabling IPv4 forwarding --------------------------
