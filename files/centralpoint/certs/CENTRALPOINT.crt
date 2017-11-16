@@ -1,0 +1,96 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 1 (0x1)
+    Signature Algorithm: sha256WithRSAEncryption
+        Issuer: C=DC, O=DataCenter, OU=DataCenter, CN=DataCenter CA/name=EasyRSA
+        Validity
+            Not Before: Mar 28 10:23:01 2017 GMT
+            Not After : Mar 26 10:23:01 2027 GMT
+        Subject: C=DC, O=DataCenter, OU=DataCenter, CN=CENTRALPOINT/name=EasyRSA
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:ad:d1:c4:79:1c:23:62:17:7c:30:5b:d7:d5:7d:
+                    bd:d9:a6:e4:a4:03:22:89:03:b1:0d:43:89:b0:7f:
+                    2a:4c:29:ee:80:ee:a9:60:2b:b0:0f:7f:a9:35:74:
+                    09:ce:24:65:93:cb:45:37:bc:0a:0a:27:da:9a:07:
+                    0a:0d:33:53:a6:ec:c0:4a:d5:32:8a:08:ed:cb:9b:
+                    cd:a3:c2:42:fd:0c:b5:38:39:84:7a:2a:c6:b6:92:
+                    87:8f:a7:7a:ff:61:17:33:72:3f:50:b8:68:fd:08:
+                    4d:9d:9d:b9:f8:3d:1d:64:ae:27:e5:8a:5f:57:0e:
+                    b4:f9:d8:78:33:17:31:35:c3:c1:23:8c:f2:2d:b2:
+                    68:1d:a5:dd:26:80:05:bd:6d:c1:b8:5a:6a:84:e1:
+                    f7:6a:d7:3b:c7:72:6a:8a:fe:79:3b:61:31:78:da:
+                    30:a7:0a:03:49:62:e5:e2:31:db:19:33:eb:14:6f:
+                    e5:1c:24:12:65:0b:d2:08:1c:98:f2:1a:bc:dc:56:
+                    a3:36:a3:5b:33:1e:9d:54:2c:e8:52:b3:d4:0d:2e:
+                    fb:a6:49:3c:30:cd:0b:33:d9:0d:f0:66:f9:44:6e:
+                    4f:02:16:43:df:f2:f8:b2:57:38:7e:57:07:71:cc:
+                    6e:ab:df:7b:3f:10:5e:fc:f9:7b:d5:6f:7b:0b:e4:
+                    6b:c7
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            Netscape Cert Type: 
+                SSL Server
+            Netscape Comment: 
+                Easy-RSA Generated Server Certificate
+            X509v3 Subject Key Identifier: 
+                19:AE:02:BD:F4:4C:9D:E6:70:6B:AC:C6:51:69:C2:D3:11:A3:95:AA
+            X509v3 Authority Key Identifier: 
+                keyid:2C:D6:66:5A:C9:A3:93:E0:F9:DA:1D:49:E6:3D:D4:7B:6C:FA:5A:8F
+                DirName:/C=DC/O=DataCenter/OU=DataCenter/CN=DataCenter CA/name=EasyRSA
+                serial:C4:A4:CD:8B:5D:6F:FE:2E
+
+            X509v3 Extended Key Usage: 
+                TLS Web Server Authentication
+            X509v3 Key Usage: 
+                Digital Signature, Key Encipherment
+            X509v3 Subject Alternative Name: 
+                DNS:CENTRALPOINT
+    Signature Algorithm: sha256WithRSAEncryption
+         ca:9d:f2:14:99:fa:5c:9d:ee:52:95:2b:2a:10:62:9c:13:da:
+         db:ac:51:e6:6c:c8:36:64:e8:cb:99:ae:49:cb:66:be:90:6f:
+         b2:d6:19:1f:a8:9a:02:2d:e9:88:d1:69:2d:9d:bf:e9:19:ec:
+         c0:bf:3d:c0:cb:15:5d:4c:7e:02:17:66:d6:6b:50:3b:1c:34:
+         1a:ef:0a:c7:50:5a:74:93:00:40:f4:a9:73:75:09:37:6a:ba:
+         2d:50:24:36:13:03:60:46:c3:a2:a9:78:fe:75:48:5f:7d:85:
+         07:e3:84:ac:0d:e3:91:18:b3:5b:35:58:03:20:f6:8b:d8:e7:
+         6c:87:cf:8e:2a:5a:3e:6d:d1:17:0f:f3:4d:2c:09:55:43:c8:
+         e7:9d:19:34:e7:a9:da:3a:27:8c:3d:15:97:21:35:8e:65:02:
+         1e:14:bd:39:ee:d5:bc:59:74:b8:0f:e8:a6:77:1b:45:e5:20:
+         a8:0c:c8:fa:ae:fc:7a:02:f7:c3:13:18:2b:f9:d7:a4:31:08:
+         61:15:f7:d2:db:c1:94:d4:19:dd:31:58:96:51:59:2b:08:c7:
+         8c:70:19:79:4e:5d:bb:a9:e9:e9:0d:c3:dc:56:3d:6b:28:12:
+         a8:54:fc:ea:33:f0:07:ba:02:e2:95:66:58:de:0b:24:02:f8:
+         bd:92:11:71
+-----BEGIN CERTIFICATE-----
+MIIEhjCCA26gAwIBAgIBATANBgkqhkiG9w0BAQsFADBhMQswCQYDVQQGEwJEQzET
+MBEGA1UEChMKRGF0YUNlbnRlcjETMBEGA1UECxMKRGF0YUNlbnRlcjEWMBQGA1UE
+AxMNRGF0YUNlbnRlciBDQTEQMA4GA1UEKRMHRWFzeVJTQTAeFw0xNzAzMjgxMDIz
+MDFaFw0yNzAzMjYxMDIzMDFaMGAxCzAJBgNVBAYTAkRDMRMwEQYDVQQKEwpEYXRh
+Q2VudGVyMRMwEQYDVQQLEwpEYXRhQ2VudGVyMRUwEwYDVQQDEwxDRU5UUkFMUE9J
+TlQxEDAOBgNVBCkTB0Vhc3lSU0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+AoIBAQCt0cR5HCNiF3wwW9fVfb3ZpuSkAyKJA7ENQ4mwfypMKe6A7qlgK7APf6k1
+dAnOJGWTy0U3vAoKJ9qaBwoNM1Om7MBK1TKKCO3Lm82jwkL9DLU4OYR6Ksa2koeP
+p3r/YRczcj9QuGj9CE2dnbn4PR1kriflil9XDrT52HgzFzE1w8EjjPItsmgdpd0m
+gAW9bcG4WmqE4fdq1zvHcmqK/nk7YTF42jCnCgNJYuXiMdsZM+sUb+UcJBJlC9II
+HJjyGrzcVqM2o1szHp1ULOhSs9QNLvumSTwwzQsz2Q3wZvlEbk8CFkPf8viyVzh+
+VwdxzG6r33s/EF78+XvVb3sL5GvHAgMBAAGjggFIMIIBRDAJBgNVHRMEAjAAMBEG
+CWCGSAGG+EIBAQQEAwIGQDA0BglghkgBhvhCAQ0EJxYlRWFzeS1SU0EgR2VuZXJh
+dGVkIFNlcnZlciBDZXJ0aWZpY2F0ZTAdBgNVHQ4EFgQUGa4CvfRMneZwa6zGUWnC
+0xGjlaowgZMGA1UdIwSBizCBiIAULNZmWsmjk+D52h1J5j3Ue2z6Wo+hZaRjMGEx
+CzAJBgNVBAYTAkRDMRMwEQYDVQQKEwpEYXRhQ2VudGVyMRMwEQYDVQQLEwpEYXRh
+Q2VudGVyMRYwFAYDVQQDEw1EYXRhQ2VudGVyIENBMRAwDgYDVQQpEwdFYXN5UlNB
+ggkAxKTNi11v/i4wEwYDVR0lBAwwCgYIKwYBBQUHAwEwCwYDVR0PBAQDAgWgMBcG
+A1UdEQQQMA6CDENFTlRSQUxQT0lOVDANBgkqhkiG9w0BAQsFAAOCAQEAyp3yFJn6
+XJ3uUpUrKhBinBPa26xR5mzINmToy5muSctmvpBvstYZH6iaAi3piNFpLZ2/6Rns
+wL89wMsVXUx+Ahdm1mtQOxw0Gu8Kx1BadJMAQPSpc3UJN2q6LVAkNhMDYEbDoql4
+/nVIX32FB+OErA3jkRizWzVYAyD2i9jnbIfPjipaPm3RFw/zTSwJVUPI550ZNOep
+2jonjD0VlyE1jmUCHhS9Oe7VvFl0uA/opncbReUgqAzI+q78egL3wxMYK/nXpDEI
+YRX30tvBlNQZ3TFYllFZKwjHjHAZeU5du6np6Q3D3FY9aygSqFT86jPwB7oC4pVm
+WN4LJAL4vZIRcQ==
+-----END CERTIFICATE-----

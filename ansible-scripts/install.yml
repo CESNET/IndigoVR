@@ -1,0 +1,55 @@
+#
+# @all nodes:
+#	- OpenVPN package
+#	- enable IP forwarding
+#
+# Centralpoint
+#	- copy CA + certificates
+#	- copy OpenVPN server configuration
+#	- enable OpenVPN service
+#	- Network configuration
+#
+# vRouter
+#	- copy OpenVPN client configuration
+#	- enable OpenVPN service
+
+
+# ------------------------------------------------------------------
+
+- hosts: all
+  tasks:
+   - name: Install OpenVPN package
+     apt: pkg=openvpn state=installed update_cache=true
+
+   - name: Enable IP forwarding
+     sysctl:
+       name: net.ipv4.ip_forward
+       value: 0
+       sysctl_set: yes
+
+# ------------------------------------------------------------------
+
+- hosts: centralpoint
+  tasks:
+
+   - copy: src=files/centralpoint dest=/etc/openvpn owner=root group=root mode=0644
+
+   - name: Enable and start OpenVPN service
+     systemd:
+       name: openvpn@centralpoint
+       enabled: yes
+       state: restarted
+
+# ------------------------------------------------------------------
+
+- hosts: vrouter
+  tasks:
+
+   - copy: src=files/client/client.conf dest=/etc/openvpn owner=root group=root mode=0644
+
+   - name: Enable and start OpenVPN service
+     systemd:
+       name: openvpn@client
+       enabled: yes
+       state: restarted
+

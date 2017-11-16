@@ -1,0 +1,5 @@
+[centralpoint]
+took121.ics.muni.cz	ansible_ssh_user=root
+
+[vrouters]
+vrouter01-metacentrum	ansible_port=65054 ansible_host=gw-cloud.ics.muni.cz variable1=XXX
