@@ -13,43 +13,44 @@
 #	- copy OpenVPN client configuration
 #	- enable OpenVPN service
 
-
-# ------------------------------------------------------------------
-
-- hosts: all
-  tasks:
-   - name: Install OpenVPN package
-     apt: pkg=openvpn state=installed update_cache=true
-
-   - name: Enable IP forwarding
-     sysctl:
-       name: net.ipv4.ip_forward
-       value: 0
-       sysctl_set: yes
-
 # ------------------------------------------------------------------
 
 - hosts: centralpoint
+  vars:
+    openvpn_name: "centralpoint"
+    
   tasks:
+    - name: Install OpenVPN
+      include_role:
+        name: openvpn
+        tasks_from: install
 
-   - copy: src=files/centralpoint dest=/etc/openvpn owner=root group=root mode=0644
+    - name: Create custom Diffie-Hellman parameters
+      shell: openssl dhparam -out /etc/openvpn/certs/dh2048.pem 2048
+      args:
+        creates: /etc/openvpn/certs/dh2048.pem
 
-   - name: Enable and start OpenVPN service
-     systemd:
-       name: openvpn@centralpoint
-       enabled: yes
-       state: restarted
+    - name: Create CRL file for OpenVPN
+      copy:
+        content: ""
+        dest: /etc/openvpn/crl.pem
+        owner: root
+        group: root
+        mode: 0640
+
+    - name: Restart OpenVPN service
+      include_role:
+        name: openvpn
+        tasks_from: service
+
 
 # ------------------------------------------------------------------
 
-- hosts: vrouter
-  tasks:
+- hosts: vrouters
+  vars:
+    openvpn_name: "client"
 
-   - copy: src=files/client/client.conf dest=/etc/openvpn owner=root group=root mode=0644
-
-   - name: Enable and start OpenVPN service
-     systemd:
-       name: openvpn@client
-       enabled: yes
-       state: restarted
-
+  roles:
+    - role: openvpn
+      openvpn_config: "files/client/"
+      openvpn_name: "client"

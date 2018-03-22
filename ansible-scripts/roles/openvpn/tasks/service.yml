@@ -1,0 +1,6 @@
+- name: Enable and start OpenVPN service
+  systemd:
+    name: "openvpn@{{ openvpn_name }}"
+    enabled: yes
+    state: restarted
+

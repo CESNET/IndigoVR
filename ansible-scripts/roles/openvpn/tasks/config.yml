@@ -1,0 +1,7 @@
+- name: Copy OpenVPN configuration
+  template:
+    src: "{{ openvpn_config }}"
+    dest: "/etc/openvpn/{{ openvpn_name }}"
+    owner: root
+    group: root
+    mode: 0600

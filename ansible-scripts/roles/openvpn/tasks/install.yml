@@ -1,0 +1,8 @@
+- name: Install OpenVPN package
+  apt: pkg=openvpn state=installed update_cache=true
+
+- name: Enable IP forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: 0
+    sysctl_set: yes
