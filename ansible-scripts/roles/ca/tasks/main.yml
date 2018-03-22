@@ -1,0 +1,32 @@
+- name: Create CA directory
+  file: /root/CA
+    state: directory
+    mode: 0700
+    owner: root
+    group: root
+
+- name: Create signed certificates directory
+  file: /root/CA/certs
+    state: directory
+    mode: 0700
+    owner: root
+    group: root
+
+- name: Copy OpenSSL CA configuration
+  copy: openssl-ca.cnf
+    dest: /root/CA/openssl.cnf
+    owner: root
+    group: root
+    mode: 0600
+
+- name:  Create CA privkey
+  shell: openssl genrsa -out /root/CA/ca.key 4096
+  args:
+    creates: /root/CA/ca.key
+
+#TODO: Better subj
+- name:  Create CA pubkey
+  shell: openssl req -config /root/CA/openssl.cnf -key /root/CA/ca.key -new -x509 -days 3650 -extensions v3_ca -out /root/CA/ca.crt -subj "/CN={{ fqdn }}/"
+  args:
+    creates: /root/CA/ca.key
+
