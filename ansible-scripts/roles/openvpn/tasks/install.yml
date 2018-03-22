@@ -6,3 +6,11 @@
     name: net.ipv4.ip_forward
     value: 0
     sysctl_set: yes
+
+- name: Create certs directory
+  file:
+    path: /etc/openvpn/certs
+    state: directory
+    mode: 0700
+    owner: root
+    group: root

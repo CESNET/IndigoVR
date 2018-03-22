@@ -39,6 +39,22 @@
         group: root
         mode: 0640
 
+    - name: Create client configuration directory
+      file:
+        path: /etc/openvpn/ccd
+        state: directory
+        mode: 0700
+        owner: root
+        group: root
+
+
+#TODO: CA, certs
+
+    - name: Configure OpenVPN
+      include_role:
+        name: openvpn
+        tasks_from: config
+
     - name: Restart OpenVPN service
       include_role:
         name: openvpn
@@ -51,7 +67,20 @@
   vars:
     openvpn_name: "client"
 
-  roles:
-    - role: openvpn
-      openvpn_config: "files/client/"
-      openvpn_name: "client"
+  tasks:
+    - name: Install OpenVPN
+      include_role:
+        name: openvpn
+        tasks_from: install
+
+#TODO: CA, certs
+
+    - name: Configure OpenVPN
+      include_role:
+        name: openvpn
+        tasks_from: config
+
+    - name: Restart OpenVPN service
+      include_role:
+        name: openvpn
+        tasks_from: service
