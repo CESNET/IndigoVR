@@ -18,6 +18,8 @@
 - hosts: centralpoint
   vars:
     openvpn_name: "centralpoint"
+    ca_dir: "/root/CA"
+    cert_name: "CENTRALPOINT"
     
   tasks:
     - name: Install OpenVPN
@@ -47,8 +49,37 @@
         owner: root
         group: root
 
+    - name: Create CA
+      include_role:
+        name: openssl
+        tasks_from: ca
 
-#TODO: CA, certs
+    - name: CSR for centralpoint
+      include_role:
+        name: openssl
+        tasks_from: csr
+      vars:
+        cert_dir: /etc/openvpn/certs
+
+    - name: Copy CSR to CA
+      copy:
+        src: "/etc/openvpn/certs/{{ cert_name }}.csr"
+        dest: "{{ ca_dir }}/certs/{{ cert_name }}.csr"
+
+    - name: Sign certificate for centralpoint
+      include_role:
+        name: openssl
+        tasks_from: sign
+
+    - name: Copy certificate to OpenVPN
+      copy:
+        src: "{{ ca_dir }}/certs/{{ cert_name }}.crt"
+        dest: "/etc/openvpn/certs/{{ cert_name }}.crt"
+
+    - name: Copy CA certificate to OpenVPN
+      copy:
+        src: "{{ ca_dir }}/ca.crt"
+        dest: "/etc/openvpn/certs/ca.crt"
 
     - name: Configure OpenVPN
       include_role:

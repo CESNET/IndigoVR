@@ -1,0 +1,26 @@
+- name: Create private key
+  shell: openssl genrsa -out "{{ cert_dir }}/{{ cert_name }}.key" 4096
+  args:
+    creates: "{{ cert_dir }}/{{ cert_name }}.key"
+
+- name: Fix private key permissions
+  file:
+    path: "{{ cert_dir }}/{{ cert_name }}.key"
+    mode: 0400
+    owner: root
+    group: root
+
+- name: Copy OpenSSL configuration
+  copy:
+    src: openssl-csr.cnf
+    dest: "{{ cert_dir }}/openssl.cnf"
+    owner: root
+    group: root
+    mode: 0600
+
+#TODO: Better subj
+- name:  Create CSR
+  shell: openssl req -config "{{ cert_dir }}/openssl.cnf" -key "{{ cert_dir }}/{{ cert_name }}.key" -new -sha512 -out "{{ cert_dir }}/{{ cert_name }}.csr" -subj "/CN={{ ansible_fqdn }}/"
+  args:
+    creates: "{{ cert_dir }}/{{ cert_name }}.csr"
+
