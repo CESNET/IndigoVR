@@ -104,7 +104,32 @@
         name: openvpn
         tasks_from: install
 
-#TODO: CA, certs
+    - name: CSR for client
+      include_role:
+        name: openssl
+        tasks_from: csr
+      vars:
+        cert_dir: /etc/openvpn/certs
+
+    - name: Copy CSR to CA
+      copy:
+        src: "/etc/openvpn/certs/{{ cert_name }}.csr"
+        dest: "{{ ca_dir }}/certs/{{ cert_name }}.csr"
+
+    - name: Sign certificate for client
+      include_role:
+        name: openssl
+        tasks_from: sign
+
+    - name: Copy certificate to OpenVPN
+      copy:
+        src: "{{ ca_dir }}/certs/{{ cert_name }}.crt"
+        dest: "/etc/openvpn/certs/{{ cert_name }}.crt"
+
+    - name: Copy CA certificate to OpenVPN
+      copy:
+        src: "{{ ca_dir }}/ca.crt"
+        dest: "/etc/openvpn/certs/ca.crt"
 
     - name: Configure OpenVPN
       include_role:
