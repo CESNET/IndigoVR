@@ -1,7 +1,7 @@
 client
 dev tun
 proto udp
-remote {{ centralpoint-ip }} 1194
+remote {{ centralpoint_ip }} 1194
 pull
 nobind
 persist-key
@@ -10,6 +10,6 @@ comp-lzo
 verb 3
 mute 20
 ca /etc/openvpn/certs/ca.crt
-cert /etc/openvpn/certs/client.crt
-key /etc/openvpn/certs/client.key
+cert /etc/openvpn/certs/vrouter.crt
+key /etc/openvpn/certs/vrouter.key
 
