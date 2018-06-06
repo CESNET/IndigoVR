@@ -18,17 +18,16 @@
 - hosts: centralpoint
   vars:
     openvpn_name: "centralpoint"
+  roles:
+    - openvpn
     
   tasks:
-    - name: Install OpenVPN
-      include_role:
-        name: openvpn
-        tasks_from: install
-
     - name: Create custom Diffie-Hellman parameters
       shell: openssl dhparam -out /etc/openvpn/certs/dh2048.pem 2048
       args:
         creates: /etc/openvpn/certs/dh2048.pem
+      notify:
+        -  Enable and start OpenVPN service
 
     - name: Create CRL file for OpenVPN
       copy:
@@ -38,6 +37,8 @@
         owner: root
         group: root
         mode: 0640
+      notify:
+        -  Enable and start OpenVPN service
 
     - name: Create client configuration directory
       file:
@@ -46,32 +47,29 @@
         mode: 0700
         owner: root
         group: root
+      notify:
+        -  Enable and start OpenVPN service
 
     - name: Copy certificate to OpenVPN
       copy:
         src: "{{ conf_dir }}/certs/{{ cert_name }}.crt"
         dest: "/etc/openvpn/certs/CENTRALPOINT.crt"
+      notify:
+        -  Enable and start OpenVPN service
 
     - name: Copy key to OpenVPN
       copy:
         src: "{{ conf_dir }}/certs/{{ cert_name }}.key"
         dest: "/etc/openvpn/certs/CENTRALPOINT.key"
+      notify:
+        -  Enable and start OpenVPN service
 
     - name: Copy CA certificate to OpenVPN
       copy:
         src: "{{ conf_dir }}/certs/ca.crt"
         dest: "/etc/openvpn/certs/ca.crt"
-
-    - name: Configure OpenVPN
-      include_role:
-        name: openvpn
-        tasks_from: config
-
-    - name: Restart OpenVPN service
-      include_role:
-        name: openvpn
-        tasks_from: service
-
+      notify:
+        -  Enable and start OpenVPN service
 
 # ------------------------------------------------------------------
 
@@ -80,34 +78,29 @@
     openvpn_name: "vrouter"
     centralpoint_file: "{{ conf_dir }}/centralpoint"
     centralpoint_ip: "{{ lookup('file', centralpoint_file) }}"
+  roles:
+    - openvpn
 
   tasks:
-    - name: Install OpenVPN
-      include_role:
-        name: openvpn
-        tasks_from: install
-
     - name: Copy certificate to OpenVPN
       copy:
         src: "{{ conf_dir }}/certs/{{ cert_name }}.crt"
         dest: "/etc/openvpn/certs/vrouter.crt"
+      notify:
+        - Enable and start OpenVPN service
 
     - name: Copy key to OpenVPN
       copy:
         src: "{{ conf_dir }}/certs/{{ cert_name }}.key"
         dest: "/etc/openvpn/certs/vrouter.key"
+      notify:
+        - Enable and start OpenVPN service
 
     - name: Copy CA certificate to OpenVPN
       copy:
         src: "{{ conf_dir }}/certs/ca.crt"
         dest: "/etc/openvpn/certs/ca.crt"
+      notify:
+        - Enable and start OpenVPN service
 
-    - name: Configure OpenVPN
-      include_role:
-        name: openvpn
-        tasks_from: config
 
-    - name: Restart OpenVPN service
-      include_role:
-        name: openvpn
-        tasks_from: service

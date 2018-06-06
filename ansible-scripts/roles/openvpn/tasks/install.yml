@@ -1,5 +1,10 @@
 - name: Install OpenVPN package
-  apt: pkg=openvpn state=installed update_cache=true
+  apt:
+    pkg: openvpn
+    state: present
+    update_cache: true
+  notify:
+    - Enable and start OpenVPN service
 
 - name: Enable IP forwarding
   sysctl:
