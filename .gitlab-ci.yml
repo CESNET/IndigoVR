@@ -3,9 +3,9 @@ before_script:
   - apt-get install -y ansible ssl-cert
   - mkdir -p /tmp/conf/certs
   - echo "127.0.0.1" > /tmp/conf/centralpoint
-  - cp /etc/etc/ssl/private/ssl-cert-snakeoil.key /tmp/conf/certs/cert.key
-  - cp /etc/etc/ssl/certs/ssl-cert-snakeoil.pem /tmp/conf/certs/cert.crt
-  - cp /etc/etc/ssl/certs/ssl-cert-snakeoil.pem /tmp/conf/certs/ca.crt
+  - cp /etc/ssl/private/ssl-cert-snakeoil.key /tmp/conf/certs/cert.key
+  - cp /etc/ssl/certs/ssl-cert-snakeoil.pem /tmp/conf/certs/cert.crt
+  - cp /etc/ssl/certs/ssl-cert-snakeoil.pem /tmp/conf/certs/ca.crt
 
 test:stretch-vrouter:
   image: debian:stretch
