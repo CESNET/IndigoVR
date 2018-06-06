@@ -1,4 +1,4 @@
-# IndigoVR ![Build Status](https://ipmil.civ.zcu.cz/majlen/IndigoVR/badges/master/build.svg)](https://ipmil.civ.zcu.cz/majlen/IndigoVR)
+# IndigoVR [![Build Status](https://ipmil.civ.zcu.cz/majlen/IndigoVR/badges/master/build.svg)](https://ipmil.civ.zcu.cz/majlen/IndigoVR)
 The INDIGO Virtual Router Appliance facilitates creation of overlay networks across multiple federated cloud sites. It is being developed as a part of a cloud stack provided by the INDIGO-DataCloud project. It is network router appliance with the following features:
 
 * Inter-site point to point VPN
