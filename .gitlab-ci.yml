@@ -1,0 +1,38 @@
+before_script:
+  - apt-get update -y
+  - apt-get install ansible ssl-cert
+  - mkdir -p /tmp/conf/certs
+  - echo "127.0.0.1" > /tmp/conf/centralpoint
+  - cp /etc/etc/ssl/private/ssl-cert-snakeoil.key /tmp/conf/certs/cert.key
+  - cp /etc/etc/ssl/certs/ssl-cert-snakeoil.pem /tmp/conf/certs/cert.crt
+  - cp /etc/etc/ssl/certs/ssl-cert-snakeoil.pem /tmp/conf/certs/ca.crt
+
+test:stretch-vrouter:
+  image: debian:stretch
+  script:
+    - ansible-playbook -i 'vrouters,' -l vrouters -e 'ansible_connection=local conf_dir=/tmp/conf/ cert_name=cert' ansible-scripts/install.yml
+    
+test:xenial-vrouter:
+  image: ubuntu:xenial
+  script:
+    - ansible-playbook -i 'vrouters,' -l vrouters -e 'ansible_connection=local conf_dir=/tmp/conf/ cert_name=cert' ansible-scripts/install.yml
+
+test:bionic-vrouter:
+  image: ubuntu:bionic
+  script:
+    - ansible-playbook -i 'vrouters,' -l vrouters -e 'ansible_connection=local conf_dir=/tmp/conf/ cert_name=cert' ansible-scripts/install.yml
+    
+test:stretch-centralpoint:
+  image: debian:stretch
+  script:
+    - ansible-playbook -i 'centralpoint,' -l centralpoint -e 'ansible_connection=local conf_dir=/tmp/conf/ cert_name=cert' ansible-scripts/install.yml
+    
+test:xenial-centralpoint:
+  image: ubuntu:xenial
+  script:
+    - ansible-playbook -i 'centralpoint,' -l centralpoint -e 'ansible_connection=local conf_dir=/tmp/conf/ cert_name=cert' ansible-scripts/install.yml
+
+test:bionic-centralpoint:
+  image: ubuntu:bionic
+  script:
+    - ansible-playbook -i 'centralpoint,' -l centralpoint -e 'ansible_connection=local conf_dir=/tmp/conf/ cert_name=cert' ansible-scripts/install.yml
