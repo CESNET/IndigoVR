@@ -11,6 +11,8 @@
     name: net.ipv4.ip_forward
     value: 0
     sysctl_set: yes
+  when:
+    - ansible_virtualization_type != "docker"
 
 - name: Create certs directory
   file:
