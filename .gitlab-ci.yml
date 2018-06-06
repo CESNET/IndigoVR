@@ -1,6 +1,6 @@
 before_script:
   - apt-get update -y
-  - apt-get install ansible ssl-cert
+  - apt-get install -y ansible ssl-cert
   - mkdir -p /tmp/conf/certs
   - echo "127.0.0.1" > /tmp/conf/centralpoint
   - cp /etc/etc/ssl/private/ssl-cert-snakeoil.key /tmp/conf/certs/cert.key
