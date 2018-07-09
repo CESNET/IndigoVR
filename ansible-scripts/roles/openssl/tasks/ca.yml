@@ -1,0 +1,53 @@
+- name: Create CA directory
+  file:
+    path: "{{ ca_dir }}"
+    state: directory
+    mode: 0700
+    owner: root
+    group: root
+
+- name: Create signed certificates directory
+  file:
+    path: "{{ ca_dir }}/certs"
+    state: directory
+    mode: 0700
+    owner: root
+    group: root
+
+- name: Create signed certificate index
+  copy:
+    content: ""
+    dest: "{{ ca_dir }}/index.txt"
+    force: no
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Create signed certificate serial
+  copy:
+    content: "1000"
+    dest: "{{ ca_dir }}/serial"
+    force: no
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Copy OpenSSL CA configuration
+  copy:
+    src: openssl-ca.cnf
+    dest: "{{ ca_dir }}/openssl.cnf"
+    owner: root
+    group: root
+    mode: 0600
+
+- name:  Create CA privkey
+  shell: openssl genrsa -out "{{ ca_dir }}/ca.key" 4096
+  args:
+    creates: "{{ ca_dir }}/ca.key"
+
+#TODO: Better subj
+- name:  Create CA pubkey
+  shell: openssl req -config "{{ ca_dir }}/openssl.cnf" -key "{{ ca_dir }}/ca.key" -new -x509 -days 3650 -extensions v3_ca -out "{{ ca_dir }}/ca.crt" -subj "/CN={{ ansible_fqdn }}/"
+  args:
+   creates: "{{ ca_dir }}/ca.crt"
+

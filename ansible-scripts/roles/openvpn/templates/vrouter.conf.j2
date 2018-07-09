@@ -1,0 +1,15 @@
+client
+dev tun
+proto udp
+remote {{ centralpoint_ip }} 1194
+pull
+nobind
+persist-key
+persist-tun
+comp-lzo
+verb 3
+mute 20
+ca /etc/openvpn/certs/ca.crt
+cert /etc/openvpn/certs/vrouter.crt
+key /etc/openvpn/certs/vrouter.key
+

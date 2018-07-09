@@ -1,0 +1,144 @@
+#
+# @all nodes:
+#	- OpenVPN package
+#	- enable IP forwarding
+#
+# Centralpoint
+#	- copy CA + certificates
+#	- copy OpenVPN server configuration
+#	- enable OpenVPN service
+#	- Network configuration
+#
+# vRouter
+#	- copy OpenVPN client configuration
+#	- enable OpenVPN service
+
+# ------------------------------------------------------------------
+
+- hosts: centralpoint
+  vars:
+    openvpn_name: "centralpoint"
+    ca_dir: "/root/CA"
+    cert_name: "CENTRALPOINT"
+    
+  tasks:
+    - name: Install OpenVPN
+      include_role:
+        name: openvpn
+        tasks_from: install
+
+    - name: Create custom Diffie-Hellman parameters
+      shell: openssl dhparam -out /etc/openvpn/certs/dh2048.pem 2048
+      args:
+        creates: /etc/openvpn/certs/dh2048.pem
+
+    - name: Create CRL file for OpenVPN
+      copy:
+        content: ""
+        dest: /etc/openvpn/crl.pem
+        force: no
+        owner: root
+        group: root
+        mode: 0640
+
+    - name: Create client configuration directory
+      file:
+        path: /etc/openvpn/ccd
+        state: directory
+        mode: 0700
+        owner: root
+        group: root
+
+    - name: Create CA
+      include_role:
+        name: openssl
+        tasks_from: ca
+
+    - name: CSR for centralpoint
+      include_role:
+        name: openssl
+        tasks_from: csr
+      vars:
+        cert_dir: /etc/openvpn/certs
+
+    - name: Copy CSR to CA
+      copy:
+        src: "/etc/openvpn/certs/{{ cert_name }}.csr"
+        dest: "{{ ca_dir }}/certs/{{ cert_name }}.csr"
+
+    - name: Sign certificate for centralpoint
+      include_role:
+        name: openssl
+        tasks_from: sign
+
+    - name: Copy certificate to OpenVPN
+      copy:
+        src: "{{ ca_dir }}/certs/{{ cert_name }}.crt"
+        dest: "/etc/openvpn/certs/{{ cert_name }}.crt"
+
+    - name: Copy CA certificate to OpenVPN
+      copy:
+        src: "{{ ca_dir }}/ca.crt"
+        dest: "/etc/openvpn/certs/ca.crt"
+
+    - name: Configure OpenVPN
+      include_role:
+        name: openvpn
+        tasks_from: config
+
+    - name: Restart OpenVPN service
+      include_role:
+        name: openvpn
+        tasks_from: service
+
+
+# ------------------------------------------------------------------
+
+- hosts: vrouters
+  vars:
+    openvpn_name: "client"
+    #TODO: var
+    centralpoint_ip: "192.168.1.1"
+
+  tasks:
+    - name: Install OpenVPN
+      include_role:
+        name: openvpn
+        tasks_from: install
+
+    - name: CSR for client
+      include_role:
+        name: openssl
+        tasks_from: csr
+      vars:
+        cert_dir: /etc/openvpn/certs
+
+    - name: Copy CSR to CA
+      copy:
+        src: "/etc/openvpn/certs/{{ cert_name }}.csr"
+        dest: "{{ ca_dir }}/certs/{{ cert_name }}.csr"
+
+    - name: Sign certificate for client
+      include_role:
+        name: openssl
+        tasks_from: sign
+
+    - name: Copy certificate to OpenVPN
+      copy:
+        src: "{{ ca_dir }}/certs/{{ cert_name }}.crt"
+        dest: "/etc/openvpn/certs/{{ cert_name }}.crt"
+
+    - name: Copy CA certificate to OpenVPN
+      copy:
+        src: "{{ ca_dir }}/ca.crt"
+        dest: "/etc/openvpn/certs/ca.crt"
+
+    - name: Configure OpenVPN
+      include_role:
+        name: openvpn
+        tasks_from: config
+
+    - name: Restart OpenVPN service
+      include_role:
+        name: openvpn
+        tasks_from: service

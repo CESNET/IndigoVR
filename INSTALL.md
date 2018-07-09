@@ -21,25 +21,20 @@ other private address space - for example 192.168.0.0/24 - 192.168.254.0/24.
 2. CENTRALPOINT's certificates
 ------------------------------
 
-Please, generate manually SSL certificates for centrapoint and place it to 
-"files/centralpoint/certs" directory:
+Please, generate manually SSL certificates for centralpoint and place it to 
+"certs" directory:
 
 	* CENTRALPOINT.crt
 	* CENTRALPOINT.key
 	* ca.crt
 
 
-3. Prepare vRouter's OpenVPN config template.
---------------------------------------------------------
+3. vRouter's certificates
+-------------------------
 
-The template config file is available on  "files/vRouters/client.conf-template". Copy the template to vRouter config file (for example files/vRouters/client001.conf). Modify these config file parameters:
+vRouter's certifacites (crt and key file) copy to "certs" directory. The name of these files must contains the vRouter's name. For example vrouter05.key and vrouter05.crt.
 
-	1. Set up remote IP address for CENTRALPOINT [CENTRALPOINT IP] (line remote ...).
-	2. Set up CA certificate part.
-	3. Set up vRouter's public certificate part.
-	4. Set up vRouter's private key part.
-
-	Notice: Each vRouter has own config file with own certificate.
+Notice: Each vRouter has own config file with own certificate.
 
 
 4. Routing configuration
@@ -61,7 +56,14 @@ Modify the ansible's host file (file ansible-scripts/hosts).
 
 6. Start ansible
 --------------------------------------------------------
-Start ansible playbook in ansible-scripts directory: ansible-playbook -i hosts install.yml .
+Start ansible playbook in ansible-scripts directory for vRouter deployment:
+
+ansible-playbook -i 'vrouters,' -l vrouters -e 'ansible_connection=local conf_dir=<config-directory> cert_name=<vrouter-name>' install.yml
+
+For example:
+
+ansible-playbook -i 'vrouters,' -l vrouters -e 'ansible_connection=local conf_dir=/home/user/IndigoVR/ cert_name=vrouter05' install.yml
+
 
 
 7. Restart all virtual machines/routers.
@@ -74,8 +76,5 @@ Now you need to restart all virtual machines.
 --------------------------------------------------------
 
 Try ping to all vRouter OpenVPN interface and ping to IP addresses in local network behind all vRouters.
-
-
-
 
 
