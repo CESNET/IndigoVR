@@ -19,6 +19,7 @@
   vars:
     openvpn_name: "centralpoint"
   roles:
+    - centos
     - openvpn
     
   tasks:
@@ -79,6 +80,7 @@
     centralpoint_file: "{{ conf_dir }}/centralpoint"
     centralpoint_ip: "{{ lookup('file', centralpoint_file) }}"
   roles:
+    - centos
     - openvpn
 
   tasks:

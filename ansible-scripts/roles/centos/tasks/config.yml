@@ -1,0 +1,11 @@
+- name: Add EPEL repository
+  yum_repository:
+    name: epel
+    description: EPEL YUM repository
+    baseurl: "https://download.fedoraproject.org/pub/epel/{{ ansible_distribution_major_version }}/{{ ansible_userspace_architecture }}/"
+
+- name: Add EPEL GPG key
+  rpm_key:
+    key: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
+    state: present
+

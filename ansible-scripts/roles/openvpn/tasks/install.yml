@@ -1,8 +1,7 @@
 - name: Install OpenVPN package
-  apt:
-    pkg: openvpn
+  package:
+    name: openvpn
     state: present
-    update_cache: true
   notify:
     - Enable and start OpenVPN service
 
