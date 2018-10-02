@@ -13,7 +13,9 @@ Each Indigo vRouter Appliance create a secure connection to "Central point". "Ce
 * Internet to reach the main router (also needed for installation), the public IPv4 address is not required
 * two interfaces (Internet connectivity and internal network)
 
-* Debian GNU/Linux (9.0 (stretch) supported and tested) or Ubuntu Distribution (16.04 (xenial) and 18.04 (bionic) supported and tested)
+* Debian GNU/Linux (9.0 (stretch)), Ubuntu (16.04 (xenial) and 18.04 (bionic)) or CentOS (7 and 7 + EPEL)
 * OpenVPN 2
 * ISC DHCP server
+
+All the platforms mentioned in requirements are supported and deploying the playbooks is tested by CI
 
