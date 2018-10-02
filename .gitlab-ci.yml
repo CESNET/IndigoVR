@@ -10,6 +10,7 @@
 
 .yum:
   before_script:
+    - test "$ENABLE_EPEL" = "true" && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
     - yum update -y
     - yum install -y ansible openssl
     - mkdir -p /tmp/conf/certs
@@ -18,6 +19,11 @@
     - openssl pkey -in /tmp/conf/certs/keypair.pem -out /tmp/conf/certs/cert.key
     - openssl x509 -in /tmp/conf/certs/keypair.pem -out /tmp/conf/certs/cert.crt
     - openssl x509 -in /tmp/conf/certs/keypair.pem -out /tmp/conf/certs/ca.crt
+
+.yum-epel:
+  extends: .yum
+  variables:
+    ENABLE_EPEL: "true"
 
 test:stretch-vrouter:
   extends: .apt
@@ -42,6 +48,12 @@ test:centos7-vrouter:
   image: centos:7
   script:
     - ansible-playbook -i 'vrouters,' -l vrouters -e 'ansible_connection=local conf_dir=/tmp/conf/ cert_name=cert' ansible-scripts/install.yml
+
+test:centos7-epel-vrouter:
+  extends: .yum-epel
+  image: centos:7
+  script:
+    - ansible-playbook -i 'vrouters,' -l vrouters -e 'ansible_connection=local conf_dir=/tmp/conf/ cert_name=cert' ansible-scripts/install.yml
     
 test:stretch-centralpoint:
   extends: .apt
@@ -63,6 +75,12 @@ test:bionic-centralpoint:
 
 test:centos7-centralpoint:
   extends: .yum
+  image: centos:7
+  script:
+    - ansible-playbook -i 'centralpoint,' -l centralpoint -e 'ansible_connection=local conf_dir=/tmp/conf/ cert_name=cert' ansible-scripts/install.yml
+
+test:centos7-epel-centralpoint:
+  extends: .yum-epel
   image: centos:7
   script:
     - ansible-playbook -i 'centralpoint,' -l centralpoint -e 'ansible_connection=local conf_dir=/tmp/conf/ cert_name=cert' ansible-scripts/install.yml
