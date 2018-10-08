@@ -87,14 +87,14 @@
     - name: Copy certificate to OpenVPN
       copy:
         src: "{{ conf_dir }}/certs/{{ cert_name }}.crt"
-        dest: "/etc/openvpn/certs/vrouter.crt"
+        dest: "/etc/openvpn/certs/vrouter-{{ ansible_fqdn }}.crt"
       notify:
         - Enable and start OpenVPN service
 
     - name: Copy key to OpenVPN
       copy:
         src: "{{ conf_dir }}/certs/{{ cert_name }}.key"
-        dest: "/etc/openvpn/certs/vrouter.key"
+        dest: "/etc/openvpn/certs/vrouter-{{ ansible_fqdn }}.key"
       notify:
         - Enable and start OpenVPN service
 

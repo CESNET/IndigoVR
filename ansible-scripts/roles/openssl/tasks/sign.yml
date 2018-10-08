@@ -1,5 +1,0 @@
-- name:  Sign certificate
-  shell: openssl ca -config /root/CA/openssl.cnf -extensions usr_cert -days 365 -notext -batch -md sha512 -in "/root/CA/certs/{{ cert_name }}.csr" -out "/root/CA/certs/{{ cert_name }}.crt"
-  args:
-    creates: "/root/CA/certs/{{ cert_name }}.crt"
-

@@ -1,0 +1,82 @@
+#
+# @all nodes:
+#	- OpenVPN package
+#	- enable IP forwarding
+#
+# Centralpoint
+#	- copy CA + certificates
+#	- copy OpenVPN server configuration
+#	- enable OpenVPN service
+#	- Network configuration
+#
+# vRouter
+#	- copy OpenVPN client configuration
+#	- enable OpenVPN service
+
+# ------------------------------------------------------------------
+
+- hosts: centralpoint
+  vars:
+    openvpn_name: "centralpoint"
+    ca_dir: "/root/CA"
+    cert_name: "CENTRALPOINT"
+    cert_dir: "/etc/openvpn/certs/"
+  roles:
+    - centos
+    - openvpn
+    - ca
+    
+  tasks:
+    - name: Create custom Diffie-Hellman parameters
+      shell: openssl dhparam -out /etc/openvpn/certs/dh2048.pem 2048
+      args:
+        creates: /etc/openvpn/certs/dh2048.pem
+      notify:
+        -  Enable and start OpenVPN service
+
+    - name: Create CRL file for OpenVPN
+      copy:
+        content: ""
+        dest: /etc/openvpn/crl.pem
+        force: no
+        owner: root
+        group: root
+        mode: 0640
+      notify:
+        -  Enable and start OpenVPN service
+
+    - name: Create client configuration directory
+      file:
+        path: /etc/openvpn/ccd
+        state: directory
+        mode: 0700
+        owner: root
+        group: root
+      notify:
+        -  Enable and start OpenVPN service
+
+    - name: Copy CA certificate to OpenVPN
+      copy:
+        src: "{{ ca_dir }}/ca.crt"
+        dest: "{{ cert_dir }}/ca.crt"
+      notify:
+        -  Enable and start OpenVPN service
+
+    - name: CSR
+      include: "openssl/csr.yml"
+
+    - name: Copy CSR to CA
+      copy: 
+        src: "{{ cert_dir }}/{{ cert_name }}.csr"
+        dest: "{{ ca_dir }}/certs/{{ cert_name }}.csr"
+
+    - name: Sign
+      include: "openssl/sign.yml"
+
+    - name: Copy certificate to OpenVPN
+      copy:
+        src: "{{ ca_dir }}/certs/{{ cert_name }}.crt"
+        dest: "{{ cert_dir }}/{{ cert_name }}.crt"
+      notify:
+        -  Enable and start OpenVPN service
+

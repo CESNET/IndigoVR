@@ -4,4 +4,4 @@
     enabled: yes
     state: restarted
   when:
-    - ansible_virtualization_type != "docker"
+    - ansible_virtualization_type != "docker" and not ignore_handlers

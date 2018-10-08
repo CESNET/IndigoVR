@@ -12,13 +12,12 @@
 
 - name: Copy OpenSSL configuration
   copy:
-    src: openssl-csr.cnf
+    src: openssl/files/openssl-csr.cnf
     dest: "{{ cert_dir }}/openssl.cnf"
     owner: root
     group: root
     mode: 0600
 
-#TODO: Better subj
 - name:  Create CSR
   shell: openssl req -config "{{ cert_dir }}/openssl.cnf" -key "{{ cert_dir }}/{{ cert_name }}.key" -new -sha512 -out "{{ cert_dir }}/{{ cert_name }}.csr" -subj "/CN={{ ansible_fqdn }}/"
   args:
