@@ -1,86 +1,80 @@
 .apt:
   before_script:
     - apt-get update -y
-    - apt-get install -y ansible ssl-cert
-    - mkdir -p /tmp/conf/certs
-    - echo "127.0.0.1" > /tmp/conf/centralpoint
-    - cp /etc/ssl/private/ssl-cert-snakeoil.key /tmp/conf/certs/cert.key
-    - cp /etc/ssl/certs/ssl-cert-snakeoil.pem /tmp/conf/certs/cert.crt
-    - cp /etc/ssl/certs/ssl-cert-snakeoil.pem /tmp/conf/certs/ca.crt
+    - apt-get install -y ansible openssh-client
+    - mkdir -p /tmp/conf
+    - echo "centralpoint" > /tmp/conf/centralpoint
+    - echo -e "[centralpoint]\ncentralpoint\n\n[vrouters]\nlocalhost ansible_connection=local" > /tmp/conf/hosts
+    - mkdir -p /root/.ssh
+    - echo -e "$SSH_PRIVKEY" > /root/.ssh/id_ed25519
+    - chmod 0600 /root/.ssh/id_ed25519
+    - scp -o StrictHostKeyChecking=no -r ../IndigoVR root@centralpoint:/root/
+    - scp -o StrictHostKeyChecking=no /tmp/conf/hosts root@centralpoint:/root/hosts
 
 .yum:
   before_script:
     - test "$ENABLE_EPEL" = "true" && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-    - yum update -y
-    - yum install -y ansible openssl
-    - mkdir -p /tmp/conf/certs
+#    - yum update -y
+    - yum install -y ansible openssh-clients
+    - mkdir -p /tmp/conf
     - echo "127.0.0.1" > /tmp/conf/centralpoint
-    - /etc/ssl/certs/make-dummy-cert /tmp/conf/certs/keypair.pem
-    - openssl pkey -in /tmp/conf/certs/keypair.pem -out /tmp/conf/certs/cert.key
-    - openssl x509 -in /tmp/conf/certs/keypair.pem -out /tmp/conf/certs/cert.crt
-    - openssl x509 -in /tmp/conf/certs/keypair.pem -out /tmp/conf/certs/ca.crt
+    - echo -e "[centralpoint]\ncentralpoint\n\n[vrouters]\nlocalhost ansible_connection=local" > /tmp/conf/hosts
+    - mkdir -p /root/.ssh
+    - echo -e "$SSH_PRIVKEY" > /root/.ssh/id_ed25519
+    - chmod 0600 /root/.ssh/id_ed25519
+    - scp -o StrictHostKeyChecking=no -r ../IndigoVR root@centralpoint:/root/
+    - scp -o StrictHostKeyChecking=no /tmp/conf/hosts root@centralpoint:/root/hosts
 
+    
 .yum-epel:
   extends: .yum
   variables:
     ENABLE_EPEL: "true"
-
-test:stretch-vrouter:
-  extends: .apt
-  image: debian:stretch
-  script:
-    - ansible-playbook -i 'vrouters,' -l vrouters -e 'ansible_connection=local conf_dir=/tmp/conf/ cert_name=cert' ansible-scripts/install.yml
     
-test:xenial-vrouter:
-  extends: .apt
-  image: ubuntu:xenial
-  script:
-    - ansible-playbook -i 'vrouters,' -l vrouters -e 'ansible_connection=local conf_dir=/tmp/conf/ cert_name=cert' ansible-scripts/install.yml
+variables:
+  SSH_AUTHKEY: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIkoWJGwFsBsQtPao0h++apa8jLzRXohS6mUbAHzGHTe test
+  SSH_PRIVKEY: -----BEGIN OPENSSH PRIVATE KEY-----\nb3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW\nQyNTUxOQAAACCJKFiRsBbAbELT2qNIfvmqWvIy80V6IUuplGwB8xh03gAAAJDHVsW0x1bF\ntAAAAAtzc2gtZWQyNTUxOQAAACCJKFiRsBbAbELT2qNIfvmqWvIy80V6IUuplGwB8xh03g\nAAAEDRjVsiFXxJbcljqC26pbbJtOBePZi3OwtoXfU6+hKIA4koWJGwFsBsQtPao0h++apa\n8jLzRXohS6mUbAHzGHTeAAAADW1hamxlbkBtYWpsZW4=\n-----END OPENSSH PRIVATE KEY-----
 
-test:bionic-vrouter:
-  extends: .apt
-  image: ubuntu:bionic
-  script:
-    - ansible-playbook -i 'vrouters,' -l vrouters -e 'ansible_connection=local conf_dir=/tmp/conf/ cert_name=cert' ansible-scripts/install.yml
-
-test:centos7-vrouter:
+test:centos-7:
   extends: .yum
   image: centos:7
+  services:
+    - name: majlen/centos:7
+      alias: centralpoint
+      command: ["sleep", "infinity"]
   script:
-    - ansible-playbook -i 'vrouters,' -l vrouters -e 'ansible_connection=local conf_dir=/tmp/conf/ cert_name=cert' ansible-scripts/install.yml
-
-test:centos7-epel-vrouter:
-  extends: .yum-epel
-  image: centos:7
-  script:
-    - ansible-playbook -i 'vrouters,' -l vrouters -e 'ansible_connection=local conf_dir=/tmp/conf/ cert_name=cert' ansible-scripts/install.yml
+    - ssh -o StrictHostKeyChecking=no root@centralpoint ansible-playbook -i /root/hosts -e 'ansible_connection=local' IndigoVR/ansible-scripts/install_centralpoint.yml
+    - ansible-playbook -i /tmp/conf/hosts -e 'conf_dir=/tmp/conf/' ansible-scripts/install_vrouter.yml
     
-test:stretch-centralpoint:
-  extends: .apt
-  image: debian:stretch
-  script:
-    - ansible-playbook -i 'centralpoint,' -l centralpoint -e 'ansible_connection=local conf_dir=/tmp/conf/ cert_name=cert' ansible-scripts/install.yml
-    
-test:xenial-centralpoint:
+test:ubuntu-xenial:
   extends: .apt
   image: ubuntu:xenial
+  services:
+    - name: majlen/ubuntu:xenial
+      alias: centralpoint
+      command: ["sleep", "infinity"]
   script:
-    - ansible-playbook -i 'centralpoint,' -l centralpoint -e 'ansible_connection=local conf_dir=/tmp/conf/ cert_name=cert' ansible-scripts/install.yml
-
-test:bionic-centralpoint:
+    - ssh -o StrictHostKeyChecking=no root@centralpoint ansible-playbook -i /root/hosts -e 'ansible_connection=local' IndigoVR/ansible-scripts/install_centralpoint.yml
+    - ansible-playbook -i /tmp/conf/hosts -e 'conf_dir=/tmp/conf/' ansible-scripts/install_vrouter.yml
+    
+test:ubuntu-bionic:
   extends: .apt
   image: ubuntu:bionic
+  services:
+    - name: majlen/ubuntu:bionic
+      alias: centralpoint
+      command: ["sleep", "infinity"]
   script:
-    - ansible-playbook -i 'centralpoint,' -l centralpoint -e 'ansible_connection=local conf_dir=/tmp/conf/ cert_name=cert' ansible-scripts/install.yml
-
-test:centos7-centralpoint:
-  extends: .yum
-  image: centos:7
+    - ssh -o StrictHostKeyChecking=no root@centralpoint ansible-playbook -i /root/hosts -e 'ansible_connection=local' IndigoVR/ansible-scripts/install_centralpoint.yml
+    - ansible-playbook -i /tmp/conf/hosts -e 'conf_dir=/tmp/conf/' ansible-scripts/install_vrouter.yml
+    
+test:debian-stretch:
+  extends: .apt
+  image: debian:stretch
+  services:
+    - name: majlen/debian:stretch
+      alias: centralpoint
+      command: ["sleep", "infinity"]
   script:
-    - ansible-playbook -i 'centralpoint,' -l centralpoint -e 'ansible_connection=local conf_dir=/tmp/conf/ cert_name=cert' ansible-scripts/install.yml
-
-test:centos7-epel-centralpoint:
-  extends: .yum-epel
-  image: centos:7
-  script:
-    - ansible-playbook -i 'centralpoint,' -l centralpoint -e 'ansible_connection=local conf_dir=/tmp/conf/ cert_name=cert' ansible-scripts/install.yml
+    - ssh -o StrictHostKeyChecking=no root@centralpoint ansible-playbook -i /root/hosts -e 'ansible_connection=local' IndigoVR/ansible-scripts/install_centralpoint.yml
+    - ansible-playbook -i /tmp/conf/hosts -e 'conf_dir=/tmp/conf/' ansible-scripts/install_vrouter.yml
