@@ -73,4 +73,5 @@
     cert_dir: "/etc/openvpn/certs/"
 
   roles:
-    - openvpn
+    - role: openvpn
+      ignore_handlers: false
