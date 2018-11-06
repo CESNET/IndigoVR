@@ -42,6 +42,6 @@ route 192.168.1.0 255.255.255.0
 route 10.4.2.0 255.255.255.0
 route 10.0.1.0 255.255.255.0
 
-push "redirect-gateway"
 push "route-gateway 192.168.255.1"
+push "route 192.168.0.0 255.255.0.0 vpn_gateway"
 
