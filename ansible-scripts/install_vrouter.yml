@@ -50,7 +50,7 @@
         dest: "{{ ca_dir }}/certs/{{ cert_name }}.csr"
 
     - name: Sign
-      include: "openssl/sign.yml"
+      include: "openssl/sign-client.yml"
 
     - name: Copy certificate to OpenVPN
       fetch:
