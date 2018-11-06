@@ -45,9 +45,13 @@
   args:
     creates: "{{ ca_dir }}/ca.key"
 
-#TODO: Better subj
 - name:  Create CA pubkey
   shell: openssl req -config "{{ ca_dir }}/openssl.cnf" -key "{{ ca_dir }}/ca.key" -new -x509 -days 3650 -extensions v3_ca -out "{{ ca_dir }}/ca.crt" -subj "/CN={{ ansible_fqdn }}/"
   args:
    creates: "{{ ca_dir }}/ca.crt"
+
+- name:  Create CRL
+  shell: openssl ca -config "{{ ca_dir }}/openssl.cnf" -gencrl -out "{{ ca_dir }}/crl.pem"
+  args:
+   creates: "{{ ca_dir }}/crl.pem"
 

@@ -34,17 +34,6 @@
       notify:
         -  Enable and start OpenVPN service
 
-    - name: Create CRL file for OpenVPN
-      copy:
-        content: ""
-        dest: /etc/openvpn/crl.pem
-        force: no
-        owner: root
-        group: root
-        mode: 0640
-      notify:
-        -  Enable and start OpenVPN service
-
     - name: Create client configuration directory
       file:
         path: /etc/openvpn/ccd
@@ -59,6 +48,13 @@
       copy:
         src: "{{ ca_dir }}/ca.crt"
         dest: "{{ cert_dir }}/ca.crt"
+      notify:
+        -  Enable and start OpenVPN service
+
+    - name: Copy CRL to OpenVPN
+      copy:
+        src: "{{ ca_dir }}/crl.pem"
+        dest: "{{ cert_dir }}/crl.pem"
       notify:
         -  Enable and start OpenVPN service
 
