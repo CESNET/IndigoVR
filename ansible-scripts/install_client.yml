@@ -28,7 +28,7 @@
     - centos
     - role: openvpn
       ignore_handlers: true
-      ip_forwarding: true
+      ip_forwarding: false
 
   tasks:
     - name: CSR
@@ -76,4 +76,4 @@
   roles:
     - role: openvpn
       ignore_handlers: false
-      ip_forwarding: true
+      ip_forwarding: false

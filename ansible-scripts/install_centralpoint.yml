@@ -23,7 +23,8 @@
     cert_dir: "/etc/openvpn/certs/"
   roles:
     - centos
-    - openvpn
+    - role: openvpn
+      ip_forwarding: true
     - ca
     
   tasks:
