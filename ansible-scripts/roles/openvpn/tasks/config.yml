@@ -1,9 +1,0 @@
-- name: Copy OpenVPN configuration
-  template:
-    src: "{{ openvpn_name }}.conf.j2"
-    dest: "/etc/openvpn/{{ openvpn_name }}.conf"
-    owner: root
-    group: root
-    mode: 0600
-  notify:
-    - Enable and start OpenVPN service

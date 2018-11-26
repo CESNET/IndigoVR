@@ -17,40 +17,16 @@ Prepare IP plan and basic parameters for other steps:
 For communication between CENTRALPOINT and vRouters we use private subnet 192.168.255.0/24. This subnet is reserved. For each vRouter's local network is possible to use
 other private address space - for example 192.168.0.0/24 - 192.168.254.0/24.
 
-2. Generate configuration directories
--------------------------------------
+2. Generate configuration
+-------------------------
 
-The directory structure is given as follows (<cert-name> can be customized):
-
-```
-conf_dir
-├── centralpoint          ; contains IP address of centralpoint
-└── certs
-    ├── <cert-name>.key   ; private key for openvpn
-    ├── <cert-name>.crt   ; certificate for openvpn
-    └── ca.crt            ; CA certificate for openvpn
-```
-
-One configuration directory can be used for multiple vRouters and even centralpoint by using different certificate names.
+Configuration of each node can be adjustet by variables of the indigo-dc.indigovr role. Description and default values of all variables can be seen in `roles/indigo-dc.indigovr/defaults/main.yml`.
 
 
 3. Start ansible
 --------------------------------------------------------
-Start ansible playbook in ansible-scripts directory for vRouter deployment:
+Start corresponding ansible playbook (`install_centralpoint.yml`, `install_standalone.yml` or `install_vrouter.yml`) or use the role from https://github.com/indigo-dc/ansible-role-indigovr directly in your playbook.
 
-```
-vRouter:
-ansible-playbook -i 'vrouters,' -l vrouters -e 'ansible_connection=local conf_dir=<config-directory> cert_name=<cert-name>' install.yml
-
-centralpoint:
-ansible-playbook -i 'centralpoint,' -l centralpoint -e 'ansible_connection=local conf_dir=<config-directory> cert_name=<cert-name>' install.yml
-```
-
-For example:
-
-```
-ansible-playbook -i 'vrouters,' -l vrouters -e 'ansible_connection=local conf_dir=/home/user/IndigoVR/ cert_name=vrouter05' install.yml
-```
 
 4. Routing configuration (only applies to centralpoint)
 --------------------------------------------------------
@@ -63,5 +39,4 @@ The configuration file contains only one line "iroute <local-network-behind-vRou
 --------------------------------------------------------
 
 Try ping to all vRouter OpenVPN interface and ping to IP addresses in local network behind all vRouters.
-
 

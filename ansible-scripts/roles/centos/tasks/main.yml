@@ -1,2 +1,0 @@
-- include: config.yml
-  when: ansible_distribution == 'CentOS'

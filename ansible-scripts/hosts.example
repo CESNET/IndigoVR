@@ -1,5 +1,0 @@
-[centralpoint]
-centralpoint.domain.org		ansible_ssh_user=root
-
-[vrouters]
-vrouter01			ansible_host=gw-nat.cloud.somewhere.org ansible_port=65054
