@@ -1,0 +1,3 @@
+[submodule "roles/indigo-dc.indigovr"]
+	path = roles/indigo-dc.indigovr
+	url = https://github.com/indigo-dc/ansible-role-indigovr

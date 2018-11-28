@@ -1,0 +1,5 @@
+- hosts: localhost
+  roles:
+    - role: indigo-dc.indigovr
+      INDIGOVR_NODE_TYPE: vrouter
+      INDIGOVR_CENTRALPOINT_IP: 127.0.0.1
